@@ -32,9 +32,7 @@ const SIGN_UP_ERROR_FALLBACK =
 export class SignUp implements OnInit {
   readonly googleButton = viewChild.required<ElementRef<HTMLElement>>('googleButton');
   private readonly authService = inject(AuthService);
-  private readonly userProfileService = inject(UserProfileService);
   private readonly userMessages = inject(UserMessagesService);
-  private readonly router = inject(Router);
   protected readonly passwordVisible = signal(false);
   protected readonly confirmPasswordVisible = signal(false);
   protected readonly emailError = computed(() => visibleError(this.signUpForm.email()));
@@ -82,11 +80,7 @@ export class SignUp implements OnInit {
               email: credentials.email,
               password: credentials.password,
             });
-
-            this.authService.storeToken(token);
-            this.userProfileService.setProfile(user, token);
-
-            await this.router.navigate(['/home']);
+            await this.authService.setSession(user, token);
           } catch (error) {
             this.userMessages.showError(authErrorMessage(error, SIGN_UP_ERROR_FALLBACK));
           }

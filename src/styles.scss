@@ -22,6 +22,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
 :focus-visible {
   outline: none;
 }
@@ -56,4 +62,29 @@ body {
 }
 .auth-google-gis iframe {
   border-radius: 0.625rem !important;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+  }
 }

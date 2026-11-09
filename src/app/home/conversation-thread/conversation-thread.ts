@@ -38,18 +38,19 @@ export class ConversationThread {
   protected readonly messageForm = form(this.messageModel, (path) => {
     validate(path.text, (context) => (context.value().trim() ? undefined : requiredError()));
   });
+  protected lastMessageCount = 0;
+  private wasLoading = false;
 
   constructor() {
-    // Keep the thread pinned to the latest message. Reading these signals
-    // subscribes the effect to new messages and to the loading indicator;
-    // reading scrollHeight after render forces layout, so it stays accurate
-    // even when a long reply lands.
     afterRenderEffect(() => {
-      this.conversation();
-      this.isLoading();
-      console.log(this.conversation())
-      const element = this.scrollContainer().nativeElement;
-      element.scrollTop = element.scrollHeight;
+      const messageCount = this.conversation().messages.length;
+      const loading = this.isLoading();
+      if (messageCount !== this.lastMessageCount || loading !== this.wasLoading) {
+        this.lastMessageCount = messageCount;
+        this.wasLoading = loading;
+        const element = this.scrollContainer().nativeElement;
+        element.scrollTop = element.scrollHeight;
+      }
     });
   }
 

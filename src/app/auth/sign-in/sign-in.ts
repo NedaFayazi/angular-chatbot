@@ -29,9 +29,7 @@ const SIGN_IN_ERROR_FALLBACK = 'We could not sign you in. Please try again in a 
 })
 export class SignIn implements OnInit {
   private readonly authService = inject(AuthService);
-  private readonly userProfileService = inject(UserProfileService);
   private readonly userMessages = inject(UserMessagesService);
-  private readonly router = inject(Router);
   protected readonly googleButton = viewChild.required<ElementRef<HTMLElement>>('googleButton');
   protected readonly passwordVisible = signal(false);
   private readonly signInModel = signal<SignInForm>({ email: '', password: '' });
@@ -61,10 +59,7 @@ export class SignIn implements OnInit {
         action: async () => {
           try {
             const { user, token } = await this.authService.signIn(this.signInModel());
-
-            this.authService.storeToken(token);
-            this.userProfileService.setProfile(user, token);
-            await this.router.navigate(['/home']);
+            await this.authService.setSession(user, token);
           } catch (error) {
             this.userMessages.showError(authErrorMessage(error, SIGN_IN_ERROR_FALLBACK));
           }

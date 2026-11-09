@@ -1,18 +1,18 @@
-import {ChangeDetectionStrategy, Component, computed, inject, linkedSignal, signal} from '@angular/core';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { Router } from '@angular/router';
-import { httpResource } from "@angular/common/http";
+import {ChangeDetectionStrategy, Component, inject, linkedSignal, signal} from '@angular/core';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {Router} from '@angular/router';
+import {httpResource} from "@angular/common/http";
 
-import { SideNav } from './side-nav/side-nav';
-import { InitialState } from './initial-state/initial-state';
-import { ConversationThread } from './conversation-thread/conversation-thread';
-import { ChatService } from './chat-service';
-import { ChatMessage } from './model/chat-message';
-import { Conversation } from './model/conversation';
-import { ChatHistoryResponse} from './model/chat-history-response';
-import { AuthService } from '../auth/auth-service';
-import { UserProfileService } from '../shared/user-profile/user-profile-service';
+import {SideNav} from './side-nav/side-nav';
+import {InitialState} from './initial-state/initial-state';
+import {ChatService} from './chat-service';
+import {ChatMessage} from './model/chat-message';
+import {Conversation} from './model/conversation';
+import {ChatHistoryResponse} from './model/chat-history-response';
+import {AuthService} from '../auth/auth-service';
+import {UserProfileService} from '../shared/user-profile/user-profile-service';
 import {ChatConversationResponse} from './model/chat-conversation-response';
+import { ConversationThread } from './conversation-thread/conversation-thread';
 
 @Component({
   selector: 'home',
@@ -30,8 +30,8 @@ export class Home {
 
   protected readonly sidebarCollapsed = signal(this.isBelowMdBreakpoint());
   protected readonly chatHistoryResponse = httpResource<ChatHistoryResponse>(() =>
-                                                                    ('/api/get-chat-history'), { defaultValue: {conversations: [] }});
-  protected readonly selectConversations = httpResource<ChatConversationResponse>(() => this.activeConversationId() ? `/api/get-chat-conversation/${this.activeConversationId()}`: undefined);
+    ('/api/get-chat-history'), {defaultValue: {conversations: []}});
+  protected readonly selectConversations = httpResource<ChatConversationResponse>(() => this.activeConversationId() ? `/api/get-chat-conversation/${this.activeConversationId()}` : undefined);
 
   protected readonly newChatToken = signal(0);
   protected readonly isLoading = signal(false);
@@ -41,7 +41,6 @@ export class Home {
     this.selectConversations.hasValue() ? this.selectConversations.value().conversation : null
   );
   protected readonly conversations = linkedSignal(() => this.chatHistoryResponse.value().conversations)
-
 
   protected toggleSidebar() {
     this.sidebarCollapsed.update(collapsed => !collapsed);
@@ -70,7 +69,7 @@ export class Home {
       return;
     }
 
-    const  userMessage: ChatMessage = {
+    const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: 'user',
       content: message,
@@ -82,18 +81,14 @@ export class Home {
     try {
       if (activeConversation) {
         this.addMessage(userMessage);
-        const { reply } = await this.chatService.continueConversation(this.activeConversation()!.id, message);
-        this.addMessage({ id: crypto.randomUUID(), role: 'assistant', content: reply });
+        const {reply} = await this.chatService.continueConversation(this.activeConversation()!.id, message);
+        this.addMessage({id: crypto.randomUUID(), role: 'assistant', content: reply});
       } else {
-        this.activeConversation.set({ id: '', title: message.slice(0, 60), messages: [userMessage] });
-        const { conversationId, reply } = await this.chatService.startConversation(message);
-        this.activeConversation.update(conv => conv ? { ...conv, id: conversationId } : conv);
-        this.conversations.update(convs => [{ id: conversationId, title: message.slice(0, 60), messages:[] }, ...convs]);
-
-        this.updateConversations(conversationId, message)
-
-        this.addMessage({ id: crypto.randomUUID(), role: 'assistant', content: reply });
-
+        this.activeConversation.set({id: '', title: message.slice(0, 60), messages: [userMessage]});
+        const {conversationId, reply} = await this.chatService.startConversation(message);
+        this.activeConversation.update(conv => conv ? {...conv, id: conversationId} : conv);
+        this.conversations.update(convs => [{id: conversationId, title: message.slice(0, 60), messages: []}, ...convs]);
+        this.addMessage({id: crypto.randomUUID(), role: 'assistant', content: reply});
       }
     } catch {
       console.error('Something went wrong while getting a reply. Please try again in a few seconds.');
@@ -111,44 +106,10 @@ export class Home {
   private addMessage(message: ChatMessage) {
     this.activeConversation.update((conversation) =>
       conversation
-        ? { ...conversation, messages: [...conversation.messages, message] }
+        ? {...conversation, messages: [...conversation.messages, message]}
         : conversation,
     );
   }
-
-  private updateConversations (conversationId:string, message:string) {
-    console.log(conversationId)
-    this.conversations.update(convs => [{
-      id: conversationId,
-      title: message.slice(0, 60),
-      messages: []
-    }, ...convs]);
-  }
 }
-/*
-onst userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
-      role: 'user',
-      content: trimmed,
-    };
 
-    this.isLoading.set(true);
 
-    try {
-      if (!this.activeConversation()) {
-        this.activeConversation.set({ id: '', title: trimmed.slice(0, 60), messages: [userMessage] });
-
-        const { conversationId, reply } = await this.conversationService.startConversation(trimmed);
-
-        this.activeConversation.update(conv => conv ? { ...conv, id: conversationId } : conv);
-        this.conversations.update(convs => [{ id: conversationId, title: trimmed.slice(0, 60) }, ...convs]);
-        this.addMessageToActive({ id: crypto.randomUUID(), role: 'assistant', content: reply });
-      } else {
-        this.addMessageToActive(userMessage);
-
-        const { reply } = await this.conversationService.continueConversation(this.activeConversation()!.id, trimmed);
-
-        this.addMessageToActive({ id: crypto.randomUUID(), role: 'assistant', content: reply });
-      }
-
-  }*/
