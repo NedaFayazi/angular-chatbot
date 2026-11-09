@@ -1,0 +1,10 @@
+/* Component-specific styles for the initial (empty) state.
+   Layout and theming are handled in the template with Tailwind utilities;
+   add any rules that can't be expressed as utilities here. */
+
+/* The form container already shows a focus-within accent border, so the input
+   itself needs no separate focus ring (overrides the global :focus-visible). */
+.message-input:focus,
+.message-input:focus-visible {
+  outline: none;
+}

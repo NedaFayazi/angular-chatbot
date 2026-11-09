@@ -1,0 +1,27 @@
+/* Full-screen, non-modal veil shown during router transitions or while the
+   GlobalLoadingService is switched on. Colours come from src/styles/theme.scss. */
+.global-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background-color: color-mix(in srgb, var(--color-bg) 55%, transparent);
+  backdrop-filter: blur(2px);
+  animation: global-loading-fade-in 120ms ease;
+}
+
+@keyframes global-loading-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .global-loading-overlay {
+    animation-duration: 1ms;
+  }
+}

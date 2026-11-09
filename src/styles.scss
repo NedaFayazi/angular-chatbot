@@ -1,0 +1,59 @@
+@use './styles/theme';
+@use './styles/responsive';
+@use './styles/auth';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: none;
+}
+
+
+.auth-google-wrapper {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  cursor: pointer;
+}
+
+.auth-google-gis {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  opacity: 0.001;
+  cursor: pointer;
+  display: flex;
+}
+
+.auth-google {
+  position: relative;
+  width: 100%;
+  pointer-events: none;
+}
+
+.auth-google-gis .S9gUrf-YoZ4jf {
+  margin-block: auto !important;
+}
+.auth-google-gis iframe {
+  border-radius: 0.625rem !important;
+}

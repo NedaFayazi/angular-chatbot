@@ -1,0 +1,14 @@
+<span class="loading-indicator inline-flex" role="status">
+  <img
+    ngSrc="/images/loading-indicator.gif"
+    width="72"
+    height="72"
+    alt=""
+    aria-hidden="true"
+    priority
+    class="block"
+    [style.width.px]="size()"
+    [style.height.px]="size()"
+  />
+  <span class="sr-only">{{ label() }}</span>
+</span>

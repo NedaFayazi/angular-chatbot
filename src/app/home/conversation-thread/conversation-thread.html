@@ -1,0 +1,90 @@
+<div #scrollContainer class="flex min-h-0 flex-1 flex-col overflow-y-auto px-6 py-8">
+  <ol class="mx-auto flex w-full max-w-[var(--content-max-width)] flex-col gap-8">
+    @for (message of conversation().messages; track message.id) {
+      <li
+        class="flex items-end gap-3"
+        [class.flex-row-reverse]="message.role === 'user'"
+      >
+        <span
+          class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-full text-[var(--color-text-secondary)]"
+          [class.avatar--assistant]="message.role === 'assistant'"
+          [class.avatar--user]="message.role === 'user'"
+          aria-hidden="true"
+        >
+          @if (message.role === 'assistant') {
+            <angular-logo class="size-6" />
+          } @else {
+            <svg class="size-full" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <circle cx="12" cy="9" r="4" />
+              <path d="M12 14c-4.5 0-7.5 2.8-7.5 6.5h15c0-3.7-3-6.5-7.5-6.5Z" />
+            </svg>
+          }
+        </span>
+
+        <div
+          class="chat-bubble max-w-[calc(100%-2.75rem)] rounded-2xl px-5 py-4 leading-relaxed whitespace-pre-wrap text-[var(--color-text-primary)]"
+          [class.chat-bubble--user]="message.role === 'user'"
+          [class.chat-bubble--assistant]="message.role === 'assistant'"
+        >
+          {{ message.content }}
+        </div>
+      </li>
+    }
+  </ol>
+
+  @if (isLoading()) {
+    <div class="mt-auto flex flex-col items-center gap-2 pt-8 text-center" aria-live="polite">
+      <img src="/images/loading-indicator.gif" alt="Waiting for a reply" class="size-10" />
+      <p class="m-0 text-sm text-[var(--color-text-muted)]">
+        It can take up to 20 seconds to get a reply.<br />
+        <strong class="text-[var(--color-text-secondary)]">10</strong> seconds …
+      </p>
+    </div>
+  }
+
+</div>
+
+<div class="shrink-0 px-6 pt-4 pb-5">
+  <form
+    (submit)="onSubmit($event)"
+    class=" mx-auto flex w-full bg-[var(--color-bg-elevated)] max-w-[var(--content-max-width)] items-center gap-2 rounded-2xl border  border-[var(--color-border)]  border-transparent py-2 pr-2 pl-4 shadow-[var(--shadow-panel)] hover:border-[var(--color-border-strong)] focus-within:border-[var(--color-border-strong)"
+  >
+    <span class="flex shrink-0 text-[var(--color-text-muted)]" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="11" cy="11" r="7" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </span>
+
+    <input
+      type="text"
+      [formField]="messageForm.text"
+      placeholder="Ask anything…"
+      aria-label="Ask anything…"
+      autocomplete="off"
+      class="message-input min-w-0 flex-1  bg-transparent py-2 leading-6 text-[var(--color-text-primary)] outline-none placeholder:text-[var(--color-text-muted)]"
+    />
+
+    <button
+      type="submit"
+      [disabled]="messageForm().invalid() || isLoading()"
+      aria-label="Send message"
+      class="flex size-11 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-[var(--color-text-on-accent)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="12" y1="19" x2="12" y2="5" />
+        <polyline points="6 11 12 5 18 11" />
+      </svg>
+    </button>
+  </form>
+  <p
+    class="mx-auto mt-3 flex w-full max-w-[var(--content-max-width)] items-start gap-2 text-[0.8125rem] text-[var(--color-text-muted)]"
+  >
+    <svg class="mt-0.5 shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 9v4" />
+      <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+      <path d="M12 17h.01" />
+    </svg>
+    <span>Give our AI as much context as possible, to get the best results. If an error occurs, please try again after a few seconds.</span>
+  </p>
+</div>

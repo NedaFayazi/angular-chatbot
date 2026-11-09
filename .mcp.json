@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "angular-cli": {
+      "command": "node",
+      "args": [
+        "node_modules/@angular/cli/bin/ng.js",
+        "mcp",
+        "--experimental-tool",
+        "devserver"
+      ]
+    },
+    "webstorm": {
+      "url": "http://127.0.0.1:64696/stream",
+      "type": "http"
+    }
+  }
+}

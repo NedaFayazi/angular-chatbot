@@ -1,0 +1,121 @@
+/* Per-kind tone, the "stand out from the layout" surface treatment, and the
+   auto-dismiss / enter / leave motion for the toast. Layout, spacing and
+   typography live in the template as Tailwind utilities; tone colours come
+   from src/styles/theme.scss. */
+
+.user-message {
+  --user-message-tone: var(--color-text-muted);
+  --user-message-duration: 6000ms;
+
+  /* Lift the card clearly off the near-black layout: a tone-tinted surface a
+     step lighter than the elevated panel, a tone-tinted border, and a soft
+     coloured halo layered over a deeper panel shadow. */
+  border-color: color-mix(in srgb, var(--user-message-tone) 40%, var(--color-border-strong));
+  background-color: color-mix(in srgb, var(--user-message-tone) 10%, var(--color-bg-elevated));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--user-message-tone) 22%, transparent),
+    0 18px 44px -12px rgb(0 0 0 / 0.6),
+    0 0 24px -8px color-mix(in srgb, var(--user-message-tone) 34%, transparent);
+}
+
+/* Accent strip down the leading edge — the clearest "this is a notice" cue. */
+.user-message::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background-color: var(--user-message-tone);
+}
+
+.user-message--error {
+  --user-message-tone: var(--color-message-error);
+  --user-message-duration: 9000ms;
+}
+
+.user-message--warning {
+  --user-message-tone: var(--color-message-warning);
+  --user-message-duration: 9000ms;
+}
+
+.user-message--info {
+  --user-message-tone: var(--color-message-info);
+}
+
+.user-message--success {
+  --user-message-tone: var(--color-message-success);
+}
+
+.user-message__icon {
+  color: var(--user-message-tone);
+  background-color: color-mix(in srgb, var(--user-message-tone) 20%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--user-message-tone) 32%, transparent);
+}
+
+.user-message__close:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ---- auto-dismiss countdown ---------------------------------------------- */
+
+/* The bar shrinks over the message's lifetime; its `animationend` is what
+   removes the toast (see the template binding). Hovering or focusing the toast
+   pauses it, so the message never disappears while the user is reading it. */
+.user-message__timer {
+  background-color: color-mix(in srgb, var(--user-message-tone) 55%, transparent);
+  animation: user-message-countdown var(--user-message-duration) linear forwards;
+}
+
+.user-message:hover .user-message__timer,
+.user-message:focus-within .user-message__timer {
+  animation-play-state: paused;
+}
+
+@keyframes user-message-countdown {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* ---- enter / leave transitions ----------------------------------------- */
+
+.user-message--entering {
+  animation: user-message-in 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.user-message--leaving {
+  animation: user-message-out 160ms ease forwards;
+}
+
+@keyframes user-message-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes user-message-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .user-message--entering,
+  .user-message--leaving {
+    animation-duration: 1ms;
+  }
+}

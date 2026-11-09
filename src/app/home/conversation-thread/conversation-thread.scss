@@ -1,0 +1,75 @@
+/* Component-specific styles. Layout/spacing stays in the template via Tailwind;
+   this file holds the speech-bubble tails, avatar theming and the composer's
+   gradient border — none of which are expressible as utilities. */
+
+/* ---- message bubbles ---- */
+
+.chat-bubble {
+  position: relative;
+}
+
+.chat-bubble--user {
+  background-color: var(--color-bubble-user);
+  border-bottom-right-radius: 0.375rem;
+}
+
+.chat-bubble--assistant {
+  background-color: var(--color-bubble-assistant);
+  border-bottom-left-radius: 0.375rem;
+}
+
+/* a small beak on the bottom-outer corner, pointing at the avatar */
+.chat-bubble--user::after,
+.chat-bubble--assistant::after {
+  content: '';
+  position: absolute;
+  bottom: 0.4rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  transform: rotate(45deg);
+}
+
+.chat-bubble--user::after {
+  right: -0.28rem;
+  background: var(--color-bubble-user);
+  border-radius: 0 0 0.15rem 0;
+}
+
+.chat-bubble--assistant::after {
+  left: -0.28rem;
+  background: var(--color-bubble-assistant);
+  border-radius: 0 0 0 0.15rem;
+}
+
+/* ---- avatars ---- */
+
+.avatar--assistant {
+  background-color: var(--color-bubble-assistant);
+}
+
+.avatar--user {
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-bubble-assistant);
+}
+
+/* ---- composer ---- */
+
+/* gradient (pink → violet) border via the padding-box / border-box paint trick */
+.composer-form {
+  background:
+    linear-gradient(var(--color-bg-elevated), var(--color-bg-elevated)) padding-box,
+    var(--gradient-accent) border-box;
+  transition: box-shadow 150ms ease;
+}
+
+.composer-form:focus-within {
+  box-shadow:
+    var(--shadow-panel),
+    0 0 0 2px var(--color-accent-strong);
+}
+
+/* the form's gradient border is the focus affordance, so the input needs no ring */
+.message-input:focus,
+.message-input:focus-visible {
+  outline: none;
+}

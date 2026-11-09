@@ -1,0 +1,20 @@
+<nav class="flex flex-col gap-1" aria-label="Recent conversations">
+  <h2 class="px-3 pt-2 pb-1 text-[0.8125rem] font-bold text-[var(--color-text-primary)]">Recent</h2>
+
+  <ul class="flex flex-col gap-0.5">
+    @for (conversation of conversations(); track conversation.id) {
+      <li>
+        <button
+          type="button"
+          (click)="selectConversation.emit(conversation.id)"
+          [attr.aria-current]="conversation.id === activeConversationId() ? 'true' : null"
+          class="block w-full truncate rounded-lg px-3 h-12 py-2 text-left text-sm text-[var(--color-text-secondary)] transition-colors hover:bg-white/5 hover:text-[var(--color-text-primary)] focus-visible:bg-white/5 focus-visible:text-[var(--color-text-primary)] active:bg-white/5 active:text-[var(--color-text-primary)] aria-[current]:bg-white/5 aria-[current]:text-[var(--color-text-primary)]"
+        >
+          {{ conversation.title }}
+        </button>
+      </li>
+    } @empty {
+      <li class="px-3 py-2 text-sm text-[var(--color-text-muted)]">No chats found</li>
+    }
+  </ul>
+</nav>

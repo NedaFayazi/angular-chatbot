@@ -1,0 +1,44 @@
+:root {
+  /* Surfaces */
+  --color-bg: #17101f;
+  --color-bg-elevated: #1e1630;
+  --color-sidebar-bg: #1a1327;
+  --color-bubble-user: #4b3f6e;
+  --color-bubble-assistant: #241d38;
+
+  /* Borders */
+  --color-border: #2e2542;
+  --color-border-strong: #3a2f52;
+  --color-border-accent: #e11d74;
+
+  /* Text */
+  --color-text-primary: #f0edf6;
+  --color-text-secondary: #c3bbd4;
+  --color-text-muted: #9d94b0;
+  --color-text-on-accent: #ffffff;
+
+  /* Accents */
+  --color-accent: #e6007e;
+  --color-accent-strong: #ff2e8b;
+  --color-danger: #ff3d71;
+
+  /* User message toast accents (error / warning / info / success) */
+  --color-message-error: #ff3d71;
+  --color-message-warning: #f5a524;
+  --color-message-info: #5b9dff;
+  --color-message-success: #35c88f;
+
+  /* Gradients */
+  --gradient-accent: linear-gradient(135deg, #a24bff 0%, #e6007e 100%);
+  --gradient-title: linear-gradient(90deg, #9d7bff 0%, #e6007e 55%, #ff7ab0 100%);
+
+  /* Layout */
+  --sidebar-width: 18rem;
+  --sidebar-width-collapsed: 4rem;
+  --content-max-width: 48rem;
+
+  /* Effects */
+  --radius-panel: 1rem;
+  --shadow-panel: 0 10px 40px rgba(0, 0, 0, 0.35);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent-strong);
+}
