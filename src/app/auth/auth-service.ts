@@ -120,7 +120,10 @@ export class AuthService {
     this.storeExpiresIn(exp)
     const tick = () => {
       const left = exp - Math.floor(Date.now() / 1000);
-      if (left <= 0) this.logout();
+      if (left <= 0) {
+        this.logout();
+        this.userProfileService.clearProfile()
+      }
       else this.remainingSecond.set(left);
     };
     this.timer = setInterval(tick, 1000);

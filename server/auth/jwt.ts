@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { UserProfile } from '../model/user-profile';
 
 const JWT_ALGORITHM = 'HS256';
-const JWT_EXPIRES_IN_SECONDS = 3;
+const JWT_EXPIRES_IN_SECONDS = 60 * 60;
 
 function getJwtSecret() {
   const secret = process.env['JWT_SECRET'];
