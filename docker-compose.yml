@@ -24,9 +24,7 @@ services:
     restart: "no"
 
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile.server
+    image: nedafayazi/chatbot-backend:1.0
     ports:
       - "9000:9000"
     env_file:
@@ -37,9 +35,7 @@ services:
       - ollama
 
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.web
+    image: nedafayazi/chatbot-frontend:1.0
     ports:
       - "4200:80"
     depends_on:
