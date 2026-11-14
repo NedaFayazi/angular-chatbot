@@ -14,7 +14,6 @@ import {UserProfile} from '../shared/user-profile/user-profile';
 export const environment = {
   production: false,
   googleClientId: '800985465192-vrmrao4e7k9muqlfp3k3d7gjs3le23qr.apps.googleusercontent.com',
-  apiUrl: 'http://localhost:9000/api',
 };
 
 const AUTH_TOKEN_STORAGE_KEY = 'auth-token';
@@ -48,7 +47,7 @@ export class AuthService {
 
   private async googleCredentialResponse(response: GoogleCredentialResponse) {
     return await firstValueFrom(
-      this.httpClient.post<AuthResponse>(`${environment.apiUrl}/auth/google`, {
+      this.httpClient.post<AuthResponse>('/api/auth/google', {
         idToken: response.credential,
       }),
     );
