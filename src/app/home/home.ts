@@ -13,6 +13,7 @@ import {AuthService} from '../auth/auth-service';
 import {UserProfileService} from '../shared/user-profile/user-profile-service';
 import {ChatConversationResponse} from './model/chat-conversation-response';
 import { ConversationThread } from './conversation-thread/conversation-thread';
+import {generateId} from '../utiles/uuid';
 
 @Component({
   selector: 'home',
@@ -70,7 +71,7 @@ export class Home {
     }
 
     const userMessage: ChatMessage = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       role: 'user',
       content: message,
     };
@@ -82,13 +83,13 @@ export class Home {
       if (activeConversation) {
         this.addMessage(userMessage);
         const {reply} = await this.chatService.continueConversation(this.activeConversation()!.id, message);
-        this.addMessage({id: crypto.randomUUID(), role: 'assistant', content: reply});
+        this.addMessage({id: generateId(), role: 'assistant', content: reply});
       } else {
         this.activeConversation.set({id: '', title: message.slice(0, 60), messages: [userMessage]});
         const {conversationId, reply} = await this.chatService.startConversation(message);
         this.activeConversation.update(conv => conv ? {...conv, id: conversationId} : conv);
         this.conversations.update(convs => [{id: conversationId, title: message.slice(0, 60), messages: []}, ...convs]);
-        this.addMessage({id: crypto.randomUUID(), role: 'assistant', content: reply});
+        this.addMessage({id: generateId(), role: 'assistant', content: reply});
       }
     } catch {
       console.error('Something went wrong while getting a reply. Please try again in a few seconds.');

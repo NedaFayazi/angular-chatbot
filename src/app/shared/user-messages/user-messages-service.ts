@@ -1,6 +1,7 @@
 import { Service, signal } from '@angular/core';
 
 import { UserMessage, UserMessageKind } from './user-message';
+import {generateId} from '../../utiles/uuid';
 
 @Service()
 export class UserMessagesService {
@@ -35,7 +36,7 @@ export class UserMessagesService {
   }
 
   private addMessage(kind: UserMessageKind, text: string) {
-    const message: UserMessage = { id: crypto.randomUUID(), kind, text };
+    const message: UserMessage = { id: generateId(), kind, text };
     this.userMessages.update((messages) => [...messages, message]);
     return message.id;
   }
